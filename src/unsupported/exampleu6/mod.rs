@@ -16,10 +16,10 @@ fn exampleu6() {
     assert!(y == 8);
 }
 
-#[ensures(*x == old(*x))]
-#[ensures(*y == old(*y))]
-#[ensures(old(*x > *y) ==> result === x)] // === somehow doesn't seem to work right now
-#[ensures(old(!(*x > *y)) ==> result === y)]
+#[after_expiry(*x == old(*x))]
+#[after_expiry(*y == old(*y))]
+#[after_expiry(*x > *y ==> before_expiry(*result) == *x)]
+#[after_expiry(*x <= *y ==> before_expiry(*result) == *y)]
 fn return_larger<'a>(x: &'a mut i32, y: &'a mut i32) -> &'a mut i32 {
     if *x > *y {
         &mut (*x)
